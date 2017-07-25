@@ -25,8 +25,8 @@
         <ComboBox x:Name="cbox_3rdSubParam" HorizontalAlignment="Left" Margin="165,210,0,0" VerticalAlignment="Top" Width="200" IsEditable="True"/>
         <Button x:Name="btn_MoveUp" Content="Move UP" HorizontalAlignment="Left" Margin="470,50,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_MoveUp_Click"/>
         <Button x:Name="btn_MoveDn" Content="Move Down" HorizontalAlignment="Left" Margin="470,110,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_MoveDn_Click"/>
-        <Button x:Name="btn_RemoveRule" Content="Remove Rule" HorizontalAlignment="Left" Margin="470,170,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_RemoveRule_Click"/>
-        <Button x:Name="btn_ResetRule" Content="Reset Rules" HorizontalAlignment="Left" Margin="470,230,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_ResetRule_Click"/>
+        <Button x:Name="btn_RemoveRule" Content="Remove Rule" Background="LightYellow" HorizontalAlignment="Left" Margin="470,170,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_RemoveRule_Click"/>
+        <Button x:Name="btn_ResetRule" Content="Reset Rules" Background="LightPink" HorizontalAlignment="Left" Margin="470,230,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_ResetRule_Click"/>
         <ListView x:Name="lView_Rules" HorizontalAlignment="Stretch" Height="300" Margin="560,30,10,0" VerticalAlignment="Top" Width="auto" SelectionChanged="lView_Rules_SelectionChanged" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
@@ -53,8 +53,8 @@
         </ListView>
         <Button x:Name="btn_LoadProfile" Content="Load Profile" HorizontalAlignment="Right" Margin="0,340,100,0" VerticalAlignment="Top" Width="75" Height="50" RenderTransformOrigin="0.504,0.5" Click="btn_LoadProfile_Click"/>
         <Button x:Name="btn_SaveProfile" Content="Save Profile" HorizontalAlignment="Right" Margin="0,340,10,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_SaveProfile_Click"/>
-        <Button x:Name="btn_Reset_Filelist" Content="Reset Filelist" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="btn_Reset_Filelist_Click"/>
-        <Button x:Name="btn_Remove_Item" Content="Remove from list" HorizontalAlignment="Left" Margin="130,350,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="btn_Remove_Item_Click"/>
+        <Button x:Name="btn_Reset_Filelist" Content="Reset Filelist" Background="LightPink" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="btn_Reset_Filelist_Click"/>
+        <Button x:Name="btn_Remove_Item" Content="Remove from list" Background="LightYellow" HorizontalAlignment="Left" Margin="130,350,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="btn_Remove_Item_Click"/>
         <!--<Button x:Name="btn_Undo" Content="Undo" HorizontalAlignment="Left" Margin="290,340,0,0" VerticalAlignment="Top" Background="LightSteelBlue" Width="75" Height="50" Click="btn_Undo_Click"/>-->
         <Button x:Name="btn_Undo" HorizontalAlignment="Left" Margin="280,310,0,0" VerticalAlignment="Top" Background="LightSteelBlue" Width="80" Height="80" Click="btn_Undo_Click">
         <StackPanel>

@@ -21,7 +21,7 @@ namespace RenameToolbox
     public partial class MainWindow : Window
     {
         private XMLHelper xmlH = new XMLHelper();
-        public bool MakeRAR = false, BMP2PNG = false;
+        public bool MakeRAR = false, PIC2PNG = false;
         private enum MoveDirection { Up = -1, Down = 1 };
         public ObservableCollection<Rule> rules = new ObservableCollection<Rule>();
         public ObservableCollection<ItemToRename> Targets = new ObservableCollection<ItemToRename>();
@@ -73,8 +73,8 @@ namespace RenameToolbox
                                         case GlobalConst.MODETYPE_INSERT:
                                             newFilenameList = RuleHandler.InsertIntoFileName(newFilenameList, rule.p1, rule.p2, rule.Sub);
                                             break;
-                                        case GlobalConst.MODETYPE_BMP2PNG:
-                                            BMP2PNG = true;
+                                        case GlobalConst.MODETYPE_PIC2PNG:
+                                            PIC2PNG = true;
                                             break;
                                     }
                                     break;
@@ -231,9 +231,14 @@ namespace RenameToolbox
                                                 File.Move(fi.FullName, fi.FullName.Replace(fileCandidate.Before, fileCandidate.After));
                                             }
                                             fileCandidate.Result = GlobalConst.RESULT_RENAME_OK;
-                                            if (BMP2PNG && System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".bmp")
+                                            if (PIC2PNG && (System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".bmp" || System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".tif"))
                                             {
-                                                BitmapSource SourceBMP = new BitmapImage(new Uri(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After));
+                                                BitmapImage bmi = new BitmapImage();
+                                                bmi.BeginInit();
+                                                bmi.CacheOption = BitmapCacheOption.OnLoad;
+                                                bmi.UriSource = new Uri(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After);
+                                                bmi.EndInit();
+                                                BitmapSource SourceBMP = bmi;
                                                 using (var fileStream = new FileStream(Directory.GetParent(fileCandidate.Path).FullName + "\\" + System.IO.Path.GetFileNameWithoutExtension(fileCandidate.After) + ".png", FileMode.Create))
                                                 {
                                                     BitmapEncoder encoder = new PngBitmapEncoder();
@@ -268,7 +273,7 @@ namespace RenameToolbox
                 btn_Undo.IsEnabled = true;
             }
             MessageBox.Show("Done!");
-            MakeRAR = false; BMP2PNG = false;
+            MakeRAR = false; PIC2PNG = false;
         }
 
         private void btn_Undo_Click(object sender, RoutedEventArgs e)
@@ -548,7 +553,7 @@ namespace RenameToolbox
             (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME &&
             cbox_RenameMode.SelectedItem.ToString() == GlobalConst.MODETYPE_MAKERAR) ||
             (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FILENAME &&
-            cbox_RenameMode.SelectedItem.ToString() == GlobalConst.MODETYPE_BMP2PNG))
+            cbox_RenameMode.SelectedItem.ToString() == GlobalConst.MODETYPE_PIC2PNG))
             {
                 string aux = GlobalConst.EMPTY_STRING;
                 string p1, p2, sub = GlobalConst.EMPTY_STRING;
@@ -691,13 +696,13 @@ namespace RenameToolbox
             lView_Rules.Items.Refresh();
             listView_CollectionChanged(lView_Rules, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             MakeRAR = false;
-            BMP2PNG = false;
+            PIC2PNG = false;
         }
 
         private void btn_RemoveRule_Click(object sender, RoutedEventArgs e)
         {
             if (((Rule)lView_Rules.SelectedItem).Mode == GlobalConst.MODETYPE_MAKERAR) MakeRAR = false;
-            if (((Rule)lView_Rules.SelectedItem).Mode == GlobalConst.MODETYPE_BMP2PNG) BMP2PNG = false;
+            if (((Rule)lView_Rules.SelectedItem).Mode == GlobalConst.MODETYPE_PIC2PNG) PIC2PNG = false;
             IEditableCollectionView items = lView_Rules.Items; //Cast to interface
             if (items.CanRemove)
             {
@@ -1039,7 +1044,7 @@ namespace RenameToolbox
                 GlobalConst.MODETYPE_LOWERCASE,
                 GlobalConst.MODETYPE_INSERT
             };
-            if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FILENAME) Modes.Add(GlobalConst.MODETYPE_BMP2PNG);
+            if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FILENAME) Modes.Add(GlobalConst.MODETYPE_PIC2PNG);
             if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME) Modes.Add(GlobalConst.MODETYPE_MAKERAR);
             cbox_RenameMode.Visibility = System.Windows.Visibility.Visible;
             lbl_RenameMode.Visibility = System.Windows.Visibility.Visible;

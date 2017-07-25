@@ -38,7 +38,7 @@ namespace RenameToolbox.Class
         public const string MODETYPE_LOWERCASE = "lowercase";
         public const string MODETYPE_INSERT = "Insert";
         public const string MODETYPE_MAKERAR = "MakeRAR";
-        public const string MODETYPE_BMP2PNG = "BMP2PNG";
+        public const string MODETYPE_PIC2PNG = "PIC2PNG";
 
         public const string FUNCTYPE_ALL = "All";
         public const string FUNCTYPE_LEFT = "Left";
