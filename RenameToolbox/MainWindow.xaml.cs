@@ -969,6 +969,8 @@ namespace RenameToolbox
             lbl_2ndParam.Content = !string.IsNullOrEmpty(label) ? label : GlobalConst.EMPTY_STRING;
             cbox_2ndParam.Text = (lbl_2ndParam.Name == GlobalConst.LBL_PARAMETER2_POSITION || lbl_2ndParam.Name == GlobalConst.LBL_PARAMETER2_LENGTH) ? GlobalConst.ZERO : GlobalConst.EMPTY_STRING;
             cbox_2ndParam.Visibility = Visibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            btn_GetOriginal4Second.IsEnabled = Visibility;
+            btn_GetOriginal4Second.Visibility = Visibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
         }
         private void AuxParameters_Control(bool Visibility, string Ax1 = null, string Ax2 = null, string Ax3 = null)
         {
@@ -1032,6 +1034,23 @@ namespace RenameToolbox
             cbox_TargetType.SelectedIndex = 0;
             cbox_RenameMode_init(true);
         }
+
+        private void btn_GetOriginal4First_Click(object sender, RoutedEventArgs e)
+        {
+            if(lView_TargetList.SelectedIndex != -1)
+            {
+                cbox_1stParam.Text = ((ItemToRename)lView_TargetList.SelectedItem).Before;
+            }
+        }
+
+        private void btn_GetOriginal4Second_Click(object sender, RoutedEventArgs e)
+        {
+            if (lView_TargetList.SelectedIndex != -1)
+            {
+                cbox_2ndParam.Text = ((ItemToRename)lView_TargetList.SelectedItem).Before;
+            }
+        }
+
         private void cbox_RenameMode_init(bool init)
         {
             List<string> Modes = new List<string>
