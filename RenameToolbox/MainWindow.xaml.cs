@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿using ImageProcessor;
+using ImageProcessor.Imaging;
+using ImageProcessor.Imaging.Formats;
+using Microsoft.Win32;
 using RenameToolbox.Class;
 using System;
 using System.Collections.Generic;
@@ -11,7 +14,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media.Imaging;
 
 namespace RenameToolbox
 {
@@ -25,7 +27,7 @@ namespace RenameToolbox
         private enum MoveDirection { Up = -1, Down = 1 };
         public ObservableCollection<Rule> rules = new ObservableCollection<Rule>();
         public ObservableCollection<ItemToRename> Targets = new ObservableCollection<ItemToRename>();
-        
+
         private void btn_Preview_Click(object sender, RoutedEventArgs e)
         {
 
@@ -231,19 +233,44 @@ namespace RenameToolbox
                                                 File.Move(fi.FullName, fi.FullName.Replace(fileCandidate.Before, fileCandidate.After));
                                             }
                                             fileCandidate.Result = GlobalConst.RESULT_RENAME_OK;
-                                            if (PIC2PNG && (System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".bmp" || System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".tif"))
+                                            if (PIC2PNG) // && (System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".bmp" || System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".tif")
                                             {
-                                                BitmapImage bmi = new BitmapImage();
-                                                bmi.BeginInit();
-                                                bmi.CacheOption = BitmapCacheOption.OnLoad;
-                                                bmi.UriSource = new Uri(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After);
-                                                bmi.EndInit();
-                                                BitmapSource SourceBMP = bmi;
-                                                using (var fileStream = new FileStream(Directory.GetParent(fileCandidate.Path).FullName + "\\" + System.IO.Path.GetFileNameWithoutExtension(fileCandidate.After) + ".png", FileMode.Create))
+                                                switch (System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant())
                                                 {
-                                                    BitmapEncoder encoder = new PngBitmapEncoder();
-                                                    encoder.Frames.Add(BitmapFrame.Create(SourceBMP));
-                                                    encoder.Save(fileStream);
+                                                    case @".bmp":
+                                                    case @".tif":
+                                                    //BitmapImage bmi = new BitmapImage();
+                                                    //bmi.BeginInit();
+                                                    //bmi.CacheOption = BitmapCacheOption.OnLoad;
+                                                    //bmi.UriSource = new Uri(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After);
+                                                    //bmi.EndInit();
+                                                    //BitmapSource SourceBMP = bmi;
+                                                    //using (var fileStream = new FileStream(Directory.GetParent(fileCandidate.Path).FullName + "\\" + System.IO.Path.GetFileNameWithoutExtension(fileCandidate.After) + ".png", FileMode.Create))
+                                                    //{
+                                                    //    BitmapEncoder encoder = new PngBitmapEncoder();
+                                                    //    encoder.Frames.Add(BitmapFrame.Create(SourceBMP));
+                                                    //    encoder.Save(fileStream);
+                                                    //}
+                                                    //break;
+                                                    case @".webp":
+                                                        byte[] photoBytes = File.ReadAllBytes(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After);
+                                                        ISupportedImageFormat format = new PngFormat { Quality = 90 };
+                                                        using (MemoryStream inStream = new MemoryStream(photoBytes))
+                                                        using (ImageFactory imageFactory = new ImageFactory() { AnimationProcessMode = AnimationProcessMode.All })
+                                                        {
+                                                            try
+                                                            {
+                                                                imageFactory.Load(inStream)
+                                                                    .Format(format)
+                                                                            .Save(Directory.GetParent(fileCandidate.Path).FullName + "\\" + System.IO.Path.GetFileNameWithoutExtension(fileCandidate.After) + ".png");
+                                                            }
+                                                            catch (Exception ex)
+                                                            {
+                                                                MessageBox.Show(ex.ToString());
+                                                            }
+
+                                                        }
+                                                        break;
                                                 }
                                                 fileCandidate.Result += "-" + GlobalConst.RESULT_PNG_OK;
                                             }
@@ -1037,7 +1064,7 @@ namespace RenameToolbox
 
         private void btn_GetOriginal4First_Click(object sender, RoutedEventArgs e)
         {
-            if(lView_TargetList.SelectedIndex != -1)
+            if (lView_TargetList.SelectedIndex != -1)
             {
                 cbox_1stParam.Text = ((ItemToRename)lView_TargetList.SelectedItem).Before;
             }
