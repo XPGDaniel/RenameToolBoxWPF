@@ -233,7 +233,7 @@ namespace RenameToolbox
                                                 File.Move(fi.FullName, fi.FullName.Replace(fileCandidate.Before, fileCandidate.After));
                                             }
                                             fileCandidate.Result = GlobalConst.RESULT_RENAME_OK;
-                                            if (PIC2PNG) // && (System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".bmp" || System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant() == @".tif")
+                                            if (PIC2PNG)
                                             {
                                                 switch (System.IO.Path.GetExtension(fileCandidate.Path).ToLowerInvariant())
                                                 {
@@ -255,21 +255,28 @@ namespace RenameToolbox
                                                     case @".webp":
                                                         byte[] photoBytes = File.ReadAllBytes(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After);
                                                         ISupportedImageFormat format = new PngFormat { Quality = 90 };
-                                                        using (MemoryStream inStream = new MemoryStream(photoBytes))
-                                                        using (ImageFactory imageFactory = new ImageFactory() { AnimationProcessMode = AnimationProcessMode.All })
+                                                        MemoryStream inStream = new MemoryStream(photoBytes);
+                                                        ImageFactory imageFactory = new ImageFactory() { AnimationProcessMode = AnimationProcessMode.All };
+                                                        try
                                                         {
-                                                            try
-                                                            {
-                                                                imageFactory.Load(inStream)
-                                                                    .Format(format)
-                                                                            .Save(Directory.GetParent(fileCandidate.Path).FullName + "\\" + System.IO.Path.GetFileNameWithoutExtension(fileCandidate.After) + ".png");
-                                                            }
-                                                            catch (Exception ex)
-                                                            {
-                                                                MessageBox.Show(ex.ToString());
-                                                            }
-
+                                                            imageFactory.Load(inStream)
+                                                                .Format(format)
+                                                                        .Save(Directory.GetParent(fileCandidate.Path).FullName + "\\" + System.IO.Path.GetFileNameWithoutExtension(fileCandidate.After) + ".png");
                                                         }
+                                                        catch (ArgumentException aex)
+                                                        {
+                                                            MessageBox.Show(aex.ToString());
+                                                        }
+                                                        catch (Exception ex)
+                                                        {
+                                                            MessageBox.Show(ex.ToString());
+                                                        }
+                                                        finally
+                                                        {
+                                                            imageFactory.Dispose();
+                                                            inStream.Dispose();
+                                                        }
+
                                                         break;
                                                 }
                                                 fileCandidate.Result += "-" + GlobalConst.RESULT_PNG_OK;
