@@ -1038,6 +1038,7 @@ namespace RenameToolbox
         public MainWindow()
         {
             InitializeComponent();
+            this.Title = this.Title + " v" + System.Reflection.Assembly.GetEntryAssembly().GetName().Version;
             btn_Undo.IsEnabled = false;
             btn_UpdateRule.IsEnabled = false;
             btn_MoveUp.IsEnabled = false;
@@ -1073,7 +1074,7 @@ namespace RenameToolbox
         {
             if (lView_TargetList.SelectedIndex != -1)
             {
-                cbox_1stParam.Text = ((ItemToRename)lView_TargetList.SelectedItem).Before;
+                cbox_1stParam.Text = Path.GetFileNameWithoutExtension(((ItemToRename)lView_TargetList.SelectedItem).Before);
             }
         }
 
@@ -1081,7 +1082,22 @@ namespace RenameToolbox
         {
             if (lView_TargetList.SelectedIndex != -1)
             {
-                cbox_2ndParam.Text = ((ItemToRename)lView_TargetList.SelectedItem).Before;
+                cbox_2ndParam.Text = Path.GetFileNameWithoutExtension(((ItemToRename)lView_TargetList.SelectedItem).Before);
+            }
+        }
+        
+        private void cbox_1stParam_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ComboBox cbo = sender as ComboBox;
+
+            if (cbo != null)
+            {
+                TextBox txt = cbo.Template.FindName("PART_EditableTextBox", cbo) as TextBox;
+
+                if (txt != null)
+                {
+                    lbl_CursorPos.Content = txt.SelectionStart;
+                }
             }
         }
 

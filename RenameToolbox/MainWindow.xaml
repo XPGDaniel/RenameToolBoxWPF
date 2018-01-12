@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RenameToolbox"
         mc:Ignorable="d"
-        Title="RenameToolBox" Height="660" Width="1175" Icon="Icon.ico">
+        Title="RenameToolBox" Height="660" Width="1175" Icon="Images/if_reload_46828.ico">
     <Grid>
         <Label x:Name="lbl_TargetType" Content="Target Type : " HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="100"/>
         <Label x:Name="lbl_RenameMode" Content="Rename Mode : " HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="100"/>
@@ -18,7 +18,7 @@
         <Button x:Name="btn_UpdateRule" Content="Update Rule" HorizontalAlignment="Left" Margin="130,241,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_UpdateRule_Click"/>
         <ComboBox x:Name="cbox_TargetType" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" Width="235" SelectionChanged="cbox_TargetType_SelectionChanged"/>
         <ComboBox x:Name="cbox_RenameMode" HorizontalAlignment="Left" Margin="130,60,0,0" VerticalAlignment="Top" Width="235" SelectionChanged="cbox_RenameMode_SelectionChanged"/>
-        <ComboBox x:Name="cbox_1stParam" HorizontalAlignment="Left" Margin="130,90,0,0" VerticalAlignment="Top" Width="235" IsEditable="True" SelectionChanged="cbox_1stParam_SelectionChanged"/>
+        <ComboBox x:Name="cbox_1stParam" HorizontalAlignment="Left" Margin="130,90,0,0" VerticalAlignment="Top" Width="235" IsEditable="True" SelectionChanged="cbox_1stParam_SelectionChanged" PreviewMouseLeftButtonUp="cbox_1stParam_PreviewMouseLeftButtonUp"/>
         <ComboBox x:Name="cbox_2ndParam" HorizontalAlignment="Left" Margin="130,120,0,0" VerticalAlignment="Top" Width="235" IsEditable="True"/>
         <ComboBox x:Name="cbox_1stSubParam" HorizontalAlignment="Left" Margin="160,150,0,0" VerticalAlignment="Top" Width="205" IsEditable="True"/>
         <ComboBox x:Name="cbox_2ndSubParam" HorizontalAlignment="Left" Margin="160,180,0,0" VerticalAlignment="Top" Width="205" IsEditable="True"/>
@@ -92,6 +92,7 @@
         <Label x:Name="lbl_TargetCounts" Content="No. of Items : 0" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="btn_GetOriginal4First" Content="Get Original" HorizontalAlignment="Left" Margin="370,90,0,0" VerticalAlignment="Top" Width="75" Click="btn_GetOriginal4First_Click"/>
         <Button x:Name="btn_GetOriginal4Second" Content="Get Original" HorizontalAlignment="Left" Margin="370,120,0,0" VerticalAlignment="Top" Width="75" Click="btn_GetOriginal4Second_Click"/>
+        <Label x:Name="lbl_CursorPos" Content="" HorizontalAlignment="Left" Margin="370,59,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>
