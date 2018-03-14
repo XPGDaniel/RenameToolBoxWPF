@@ -44,6 +44,7 @@ namespace RenameToolbox
                     };
                     newFilenameList.Add(ftr);
                 }
+                newFilenameList = newFilenameList.OrderBy(o => o.Before).ToList();
                 if (rules.Any())
                 {
                     foreach (Rule rule in rules)

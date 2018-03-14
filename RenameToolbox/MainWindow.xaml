@@ -5,8 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RenameToolbox"
         mc:Ignorable="d"
-        Title="RenameToolBox" Height="660" Width="1175" Icon="Images/if_reload_46828.ico">
+        Title="Rename Toolbox" Height="660" Width="1175" Icon="Images/if_reload_46828.ico">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="119*"/>
+            <ColumnDefinition Width="465*"/>
+        </Grid.ColumnDefinitions>
         <Label x:Name="lbl_TargetType" Content="Target Type : " HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="100"/>
         <Label x:Name="lbl_RenameMode" Content="Rename Mode : " HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="100"/>
         <Label x:Name="lbl_1stParam" Content="First Parameter : " HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Width="150"/>
@@ -16,18 +20,18 @@
         <Label x:Name="lbl_3rdSubParam" Content="Thrid Sub Parameter : " HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Width="150"/>
         <Button x:Name="btn_AddRule" Content="Add Rule" HorizontalAlignment="Left" Margin="10,241,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_AddRule_Click"/>
         <Button x:Name="btn_UpdateRule" Content="Update Rule" HorizontalAlignment="Left" Margin="130,241,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_UpdateRule_Click"/>
-        <ComboBox x:Name="cbox_TargetType" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" Width="235" SelectionChanged="cbox_TargetType_SelectionChanged"/>
-        <ComboBox x:Name="cbox_RenameMode" HorizontalAlignment="Left" Margin="130,60,0,0" VerticalAlignment="Top" Width="235" SelectionChanged="cbox_RenameMode_SelectionChanged"/>
-        <ComboBox x:Name="cbox_1stParam" HorizontalAlignment="Left" Margin="130,90,0,0" VerticalAlignment="Top" Width="235" IsEditable="True" SelectionChanged="cbox_1stParam_SelectionChanged" PreviewMouseLeftButtonUp="cbox_1stParam_PreviewMouseLeftButtonUp"/>
-        <ComboBox x:Name="cbox_2ndParam" HorizontalAlignment="Left" Margin="130,120,0,0" VerticalAlignment="Top" Width="235" IsEditable="True"/>
-        <ComboBox x:Name="cbox_1stSubParam" HorizontalAlignment="Left" Margin="160,150,0,0" VerticalAlignment="Top" Width="205" IsEditable="True"/>
-        <ComboBox x:Name="cbox_2ndSubParam" HorizontalAlignment="Left" Margin="160,180,0,0" VerticalAlignment="Top" Width="205" IsEditable="True"/>
-        <ComboBox x:Name="cbox_3rdSubParam" HorizontalAlignment="Left" Margin="160,210,0,0" VerticalAlignment="Top" Width="205" IsEditable="True"/>
-        <Button x:Name="btn_MoveUp" Content="Move UP" HorizontalAlignment="Left" Margin="470,50,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_MoveUp_Click"/>
-        <Button x:Name="btn_MoveDn" Content="Move Down" HorizontalAlignment="Left" Margin="470,110,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_MoveDn_Click"/>
-        <Button x:Name="btn_RemoveRule" Content="Remove Rule" Background="LightYellow" HorizontalAlignment="Left" Margin="470,170,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_RemoveRule_Click"/>
-        <Button x:Name="btn_ResetRule" Content="Reset Rules" Background="LightPink" HorizontalAlignment="Left" Margin="470,230,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_ResetRule_Click"/>
-        <ListView x:Name="lView_Rules" HorizontalAlignment="Stretch" Height="300" Margin="560,30,10,0" VerticalAlignment="Top" Width="auto" SelectionChanged="lView_Rules_SelectionChanged" >
+        <ComboBox x:Name="cbox_TargetType" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" Width="235" SelectionChanged="cbox_TargetType_SelectionChanged" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="cbox_RenameMode" HorizontalAlignment="Left" Margin="130,60,0,0" VerticalAlignment="Top" Width="235" SelectionChanged="cbox_RenameMode_SelectionChanged" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="cbox_1stParam" HorizontalAlignment="Left" Margin="130,90,0,0" VerticalAlignment="Top" Width="235" IsEditable="True" SelectionChanged="cbox_1stParam_SelectionChanged" PreviewMouseLeftButtonUp="cbox_1stParam_PreviewMouseLeftButtonUp" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="cbox_2ndParam" HorizontalAlignment="Left" Margin="130,120,0,0" VerticalAlignment="Top" Width="235" IsEditable="True" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="cbox_1stSubParam" HorizontalAlignment="Left" Margin="160,150,0,0" VerticalAlignment="Top" Width="205" IsEditable="True" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="cbox_2ndSubParam" HorizontalAlignment="Left" Margin="160,180,0,0" VerticalAlignment="Top" Width="205" IsEditable="True" Grid.ColumnSpan="2"/>
+        <ComboBox x:Name="cbox_3rdSubParam" HorizontalAlignment="Left" Margin="160,210,0,0" VerticalAlignment="Top" Width="205" IsEditable="True" Grid.ColumnSpan="2"/>
+        <Button x:Name="btn_MoveUp" Content="Move UP" HorizontalAlignment="Left" Margin="231.667,50,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_MoveUp_Click" Grid.Column="1"/>
+        <Button x:Name="btn_MoveDn" Content="Move Down" HorizontalAlignment="Left" Margin="231.667,110,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_MoveDn_Click" Grid.Column="1"/>
+        <Button x:Name="btn_RemoveRule" Content="Remove Rule" Background="LightYellow" HorizontalAlignment="Left" Margin="231.667,170,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_RemoveRule_Click" Grid.Column="1"/>
+        <Button x:Name="btn_ResetRule" Content="Reset Rules" Background="LightPink" HorizontalAlignment="Left" Margin="231.667,230,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_ResetRule_Click" Grid.Column="1"/>
+        <ListView x:Name="lView_Rules" HorizontalAlignment="Stretch" Height="300" Margin="321.667,30,10,0" VerticalAlignment="Top" Width="auto" SelectionChanged="lView_Rules_SelectionChanged" Grid.Column="1" >
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="BorderBrush" Value="LightGray" />
@@ -51,29 +55,29 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="btn_LoadProfile" Content="Load Profile" HorizontalAlignment="Right" Margin="0,340,100,0" VerticalAlignment="Top" Width="75" Height="50" RenderTransformOrigin="0.504,0.5" Click="btn_LoadProfile_Click"/>
-        <Button x:Name="btn_SaveProfile" Content="Save Profile" HorizontalAlignment="Right" Margin="0,340,10,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_SaveProfile_Click"/>
+        <Button x:Name="btn_LoadProfile" Content="Load Profile" HorizontalAlignment="Right" Margin="0,340,100,0" VerticalAlignment="Top" Width="75" Height="50" RenderTransformOrigin="0.504,0.5" Click="btn_LoadProfile_Click" Grid.Column="1"/>
+        <Button x:Name="btn_SaveProfile" Content="Save Profile" HorizontalAlignment="Right" Margin="0,340,10,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_SaveProfile_Click" Grid.Column="1"/>
         <Button x:Name="btn_Reset_Filelist" Content="Reset Filelist" Background="LightPink" HorizontalAlignment="Left" Margin="10,350,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="btn_Reset_Filelist_Click"/>
         <Button x:Name="btn_Remove_Item" Content="Remove from list" Background="LightYellow" HorizontalAlignment="Left" Margin="130,350,0,0" VerticalAlignment="Top" Width="100" Height="30" Click="btn_Remove_Item_Click"/>
         <!--<Button x:Name="btn_Undo" Content="Undo" HorizontalAlignment="Left" Margin="290,340,0,0" VerticalAlignment="Top" Background="LightSteelBlue" Width="75" Height="50" Click="btn_Undo_Click"/>-->
-        <Button x:Name="btn_Undo" HorizontalAlignment="Left" Margin="280,310,0,0" VerticalAlignment="Top" Background="LightSteelBlue" Width="80" Height="80" Click="btn_Undo_Click">
+        <Button x:Name="btn_Undo" HorizontalAlignment="Left" Margin="41.667,310,0,0" VerticalAlignment="Top" Background="LightSteelBlue" Width="80" Height="80" Click="btn_Undo_Click" Grid.Column="1">
             <StackPanel>
                 <Image Source="Images\Undo.png" />
             </StackPanel>
         </Button>
         <!--<Button x:Name="btn_GO" Content="Do it" HorizontalAlignment="Left" Margin="391,340,0,0" VerticalAlignment="Top" Width="75" Height="50" Click="btn_GO_Click" Background="LightGreen"/>-->
-        <Button x:Name="btn_GO" HorizontalAlignment="Left" Margin="370,310,0,0" VerticalAlignment="Top" Width="80" Height="80" Background="LightGreen" Click="btn_GO_Click">
+        <Button x:Name="btn_GO" HorizontalAlignment="Left" Margin="131.667,310,0,0" VerticalAlignment="Top" Width="80" Height="80" Background="LightGreen" Click="btn_GO_Click" Grid.Column="1">
             <StackPanel>
                 <Image Source="Images\GO.png" />
             </StackPanel>
         </Button>
         <!--<Button x:Name="btn_Preview" Content="Preview" HorizontalAlignment="Left" Margin="471,340,0,0" VerticalAlignment="Top" Width="75" Height="50" Background="LightSkyBlue" Click="btn_Preview_Click"/>-->
-        <Button x:Name="btn_Preview" HorizontalAlignment="Left" Margin="460,310,0,0" VerticalAlignment="Top" Width="80" Height="80" Background="LightSkyBlue" Click="btn_Preview_Click">
+        <Button x:Name="btn_Preview" HorizontalAlignment="Left" Margin="221.667,310,0,0" VerticalAlignment="Top" Width="80" Height="80" Background="LightSkyBlue" Click="btn_Preview_Click" Grid.Column="1">
             <StackPanel>
                 <Image Source="Images\Preview.png" />
             </StackPanel>
         </Button>
-        <ListView x:Name="lView_TargetList" HorizontalAlignment="Stretch" Height="auto" Margin="10,420,10,10" VerticalAlignment="Stretch" Width="auto" ScrollViewer.VerticalScrollBarVisibility="Auto" AllowDrop="True" Drop="lView_TargetList_Drop" DragEnter="lView_TargetList_DragEnter" SelectionChanged="lView_TargetList_SelectionChanged" DragOver="lView_TargetList_DragOver">
+        <ListView x:Name="lView_TargetList" HorizontalAlignment="Stretch" Height="auto" Margin="10,420,10,9.667" VerticalAlignment="Stretch" Width="auto" ScrollViewer.VerticalScrollBarVisibility="Auto" AllowDrop="True" Drop="lView_TargetList_Drop" DragEnter="lView_TargetList_DragEnter" SelectionChanged="lView_TargetList_SelectionChanged" DragOver="lView_TargetList_DragOver" Grid.ColumnSpan="2">
             <ListView.ItemContainerStyle>
                 <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="BorderBrush" Value="LightGray" />
@@ -90,9 +94,9 @@
             </ListView.View>
         </ListView>
         <Label x:Name="lbl_TargetCounts" Content="No. of Items : 0" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" Width="120"/>
-        <Button x:Name="btn_GetOriginal4First" Content="Get Original" HorizontalAlignment="Left" Margin="370,90,0,0" VerticalAlignment="Top" Width="75" Click="btn_GetOriginal4First_Click"/>
-        <Button x:Name="btn_GetOriginal4Second" Content="Get Original" HorizontalAlignment="Left" Margin="370,120,0,0" VerticalAlignment="Top" Width="75" Click="btn_GetOriginal4Second_Click"/>
-        <Label x:Name="lbl_CursorPos" Content="" HorizontalAlignment="Left" Margin="370,59,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="btn_GetOriginal4First" Content="Get Original" HorizontalAlignment="Left" Margin="131.667,90,0,0" VerticalAlignment="Top" Width="75" Click="btn_GetOriginal4First_Click" Grid.Column="1"/>
+        <Button x:Name="btn_GetOriginal4Second" Content="Get Original" HorizontalAlignment="Left" Margin="131.667,120,0,0" VerticalAlignment="Top" Width="75" Click="btn_GetOriginal4Second_Click" Grid.Column="1"/>
+        <Label x:Name="lbl_CursorPos" Content="" HorizontalAlignment="Left" Margin="131.667,59,0,0" VerticalAlignment="Top" Width="75" Grid.Column="1"/>
 
     </Grid>
 </Window>
