@@ -52,18 +52,18 @@
         </Style>
     </Window.Resources>
     <Grid Background="#2B2B2B">
-        <Label x:Name="lbl_TargetType" Content="Target Type : " HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="100" Height="26"/>
-        <Label x:Name="lbl_RenameMode" Content="Rename Mode : " HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="100" Height="26"/>
-        <Label x:Name="lbl_1stParam" Content="First Parameter : " HorizontalAlignment="Left" Margin="10,90,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
-        <Label x:Name="lbl_2ndParam" Content="Second Parameter : " HorizontalAlignment="Left" Margin="10,160,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
+        <Label x:Name="lbl_TargetType" Content="Target Type : " HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Width="100" Height="26"/>
+        <Label x:Name="lbl_RenameMode" Content="Rename Mode : " HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="100" Height="26"/>
+        <Label x:Name="lbl_1stParam" Content="First Parameter : " HorizontalAlignment="Left" Margin="10,69,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
+        <Label x:Name="lbl_2ndParam" Content="Second Parameter : " HorizontalAlignment="Left" Margin="10,139,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
         <Label x:Name="lbl_1stSubParam" Content="First Sub Parameter : " HorizontalAlignment="Left" Margin="10,214,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
         <Label x:Name="lbl_2ndSubParam" Content="Second Sub Parameter : " HorizontalAlignment="Left" Margin="10,247,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
         <Label x:Name="lbl_3rdSubParam" Content="Thrid Sub Parameter : " HorizontalAlignment="Left" Margin="10,277,0,0" VerticalAlignment="Top" Width="150" Height="26"/>
         <Button x:Name="btn_AddRule" Content="Add Rule" HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="90" Height="50" Click="btn_AddRule_Click"/>
         <Button x:Name="btn_UpdateRule" Content="Update Rule" HorizontalAlignment="Left" Margin="130,312,0,0" VerticalAlignment="Top" Width="100" Height="50" Click="btn_UpdateRule_Click"/>
-        <ComboBox x:Name="cbox_TargetType" HorizontalAlignment="Left" Margin="130,30,0,0" VerticalAlignment="Top" Width="133" SelectionChanged="cbox_TargetType_SelectionChanged" Height="22"/>
-        <ComboBox x:Name="cbox_RenameMode" HorizontalAlignment="Left" Margin="130,60,0,0" VerticalAlignment="Top" Width="133" SelectionChanged="cbox_RenameMode_SelectionChanged" Height="22"/>
-        <ComboBox x:Name="cbox_1stSubParam" HorizontalAlignment="Left" Margin="130,214,0,0" VerticalAlignment="Top" Width="150" IsEditable="True" Height="22"/>
+        <ComboBox x:Name="cbox_TargetType" HorizontalAlignment="Left" Margin="130,9,0,0" VerticalAlignment="Top" Width="133" SelectionChanged="cbox_TargetType_SelectionChanged" Height="22"/>
+        <ComboBox x:Name="cbox_RenameMode" HorizontalAlignment="Left" Margin="130,39,0,0" VerticalAlignment="Top" Width="133" SelectionChanged="cbox_RenameMode_SelectionChanged" Height="22"/>
+        <ComboBox x:Name="cbox_1stSubParam" HorizontalAlignment="Left" Margin="130,214,0,0" VerticalAlignment="Top" Width="315" IsEditable="True" Height="22"/>
         <ComboBox x:Name="cbox_2ndSubParam" HorizontalAlignment="Left" Margin="130,247,0,0" VerticalAlignment="Top" Width="100" IsEditable="True" Height="22"/>
         <ComboBox x:Name="cbox_3rdSubParam" HorizontalAlignment="Left" Margin="130,277,0,0" VerticalAlignment="Top" Width="100" IsEditable="True" Height="22"/>
         <Button x:Name="btn_MoveUp" Content="Move&#xD;&#xA;  UP" HorizontalAlignment="Left" Margin="459,26,0,0" VerticalAlignment="Top" Width="77" Height="50" Click="btn_MoveUp_Click"/>
@@ -227,14 +227,14 @@
         </ListView>
         <Label x:Name="lbl_TargetCounts" Content="No. of Items : 0" HorizontalAlignment="Left" Margin="10,394,0,0" VerticalAlignment="Top" Width="120" Height="26"/>
 
-        <ComboBox x:Name="cbox_1stParam" HorizontalAlignment="Left" VerticalAlignment="Top" Width="315" IsEditable="True" SelectionChanged="cbox_1stParam_SelectionChanged" PreviewMouseLeftButtonUp="cbox_1stParam_PreviewMouseLeftButtonUp" Margin="130,90,0,0" />
-        <Button x:Name="btn_GetOriginal4First" Content="Get Original" HorizontalAlignment="Left" Margin="336,125,0,0" VerticalAlignment="Top" Width="109" Click="btn_GetOriginal4First_Click" Height="25"/>
+        <ComboBox x:Name="cbox_1stParam" HorizontalAlignment="Left" VerticalAlignment="Top" Width="315" IsEditable="True" SelectionChanged="cbox_1stParam_SelectionChanged" PreviewMouseLeftButtonUp="cbox_1stParam_PreviewMouseLeftButtonUp" Margin="130,69,0,0" />
+        <Button x:Name="btn_GetOriginal4First" Content="Get Original" HorizontalAlignment="Left" Margin="336,104,0,0" VerticalAlignment="Top" Width="109" Click="btn_GetOriginal4First_Click" Height="25"/>
 
 
-        <ComboBox x:Name="cbox_2ndParam" HorizontalAlignment="Left" VerticalAlignment="Top" Width="315" IsEditable="True" Margin="130,160,0,0"/>
-        <Button x:Name="btn_GetOriginal4Second" Content="Get Original" HorizontalAlignment="Left" Margin="336,195,0,0" VerticalAlignment="Top" Width="109" Click="btn_GetOriginal4Second_Click"/>
+        <ComboBox x:Name="cbox_2ndParam" HorizontalAlignment="Left" VerticalAlignment="Top" Width="315" IsEditable="True" Margin="130,139,0,0"/>
+        <Button x:Name="btn_GetOriginal4Second" Content="Get Original" HorizontalAlignment="Left" Margin="336,175,0,0" VerticalAlignment="Top" Width="109" Click="btn_GetOriginal4Second_Click"/>
 
-        <Label x:Name="lbl_CursorPos" Content="" HorizontalAlignment="Left" Margin="370,56,0,0" VerticalAlignment="Top" Width="75" Height="26"/>
+        <Label x:Name="lbl_CursorPos" Content="" HorizontalAlignment="Left" Margin="370,35,0,0" VerticalAlignment="Top" Width="75" Height="26"/>
 
     </Grid>
 </Window>
