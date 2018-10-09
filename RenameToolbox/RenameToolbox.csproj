@@ -160,6 +160,11 @@
   <ItemGroup>
     <Resource Include="Themes\MetroDark\HowToApplyTheme.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\GO.png" />
+    <Resource Include="Images\Preview.png" />
+    <Resource Include="Images\Undo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
