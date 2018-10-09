@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RenameToolbox"
         mc:Ignorable="d"
-        Title="Rename Toolbox" Height="660" Width="1175" Icon="Images/if_reload_46828.ico">
+        Title="Rename Toolbox Alter" Height="660" Width="1175" Icon="Images/if_reload_46828.ico">
     <Window.Resources>
         <Style x:Key="GridViewColumnHeaderGripper"
        TargetType="Thumb">

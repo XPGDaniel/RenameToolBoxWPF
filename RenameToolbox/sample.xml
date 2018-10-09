@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Rule>
+  <Rule Enable="True" Target="FileName" Mode="prefix" p1="Prefix - " p2="" Sub="" />
+  <Rule Enable="True" Target="FileName" Mode="Suffix" p1=" - suffix" p2="" Sub="" />
+  <Rule Enable="True" Target="FileName" Mode="Replace" p1="sample" p2="example" Sub="" />
+  <Rule Enable="True" Target="FileName" Mode="UPPERCASE" p1="Right" p2="1" Sub="" />
+  <Rule Enable="True" Target="FileName" Mode="lowercase" p1="Left" p2="1" Sub="" />
+  <Rule Enable="True" Target="FileName" Mode="Insert" p1="Phase" p2="7" Sub="(" />
+  <Rule Enable="True" Target="FileName" Mode="Insert" p1="Phase" p2="9" Sub=")" />
+  <Rule Enable="True" Target="FileName" Mode="Remove" p1="(*)" p2="" Sub="" />
+  <Rule Enable="True" Target="FileName" Mode="Insert" p1="Digit" p2="0" Sub="1;5;1" />
+</Rule>
