@@ -884,7 +884,7 @@ namespace RenameToolbox
         {
             lbl_2ndParam.Content = GlobalConst.LBL_PARAMETER2_DEFAULT;
             AuxParameters_Control(false);
-            cbox_RenameMode_init(false);
+            cbox_RenameMode_init(true);
         }
 
         private void cbox_RenameMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
