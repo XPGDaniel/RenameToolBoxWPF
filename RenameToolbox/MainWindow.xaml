@@ -235,6 +235,7 @@
         <Button x:Name="btn_GetOriginal4Second" Content="Get Original" HorizontalAlignment="Left" Margin="336,175,0,0" VerticalAlignment="Top" Width="109" Click="btn_GetOriginal4Second_Click"/>
 
         <Label x:Name="lbl_CursorPos" Content="" HorizontalAlignment="Left" Margin="370,35,0,0" VerticalAlignment="Top" Width="75" Height="26"/>
+        <Label x:Name="lbl_TotalDuration" Content="Total Duration : " HorizontalAlignment="Left" Margin="130,394,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

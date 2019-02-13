@@ -2,6 +2,7 @@
 using ImageProcessor.Imaging;
 using ImageProcessor.Imaging.Formats;
 using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Shell;
 using RenameToolbox.Class;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,9 @@ namespace RenameToolbox
         private enum MoveDirection { Up = -1, Down = 1 };
         public ObservableCollection<Rule> rules = new ObservableCollection<Rule>();
         public ObservableCollection<ItemToRename> Targets = new ObservableCollection<ItemToRename>();
+        public TimeSpan totalDuration = new TimeSpan(0);
 
+        #region Buttons
         private void btn_Preview_Click(object sender, RoutedEventArgs e)
         {
 
@@ -149,7 +152,6 @@ namespace RenameToolbox
                 lView_TargetList.Items.Refresh();
             }
         }
-
         private void btn_GO_Click(object sender, RoutedEventArgs e)
         {
             btn_Preview_Click(null, null);
@@ -310,7 +312,6 @@ namespace RenameToolbox
             MessageBox.Show("Done!");
             MakeRAR = false; PIC2PNG = false;
         }
-
         private void btn_Undo_Click(object sender, RoutedEventArgs e)
         {
             if (lView_TargetList.Items.Count > 0)
@@ -381,6 +382,22 @@ namespace RenameToolbox
                 btn_Undo.IsEnabled = false;
             }
         }
+        private void btn_GetOriginal4First_Click(object sender, RoutedEventArgs e)
+        {
+            if (lView_TargetList.SelectedIndex != -1)
+            {
+                cbox_1stParam.Text = Path.GetFileNameWithoutExtension(((ItemToRename)lView_TargetList.SelectedItem).Before);
+            }
+        }
+        private void btn_GetOriginal4Second_Click(object sender, RoutedEventArgs e)
+        {
+            if (lView_TargetList.SelectedIndex != -1)
+            {
+                cbox_2ndParam.Text = Path.GetFileNameWithoutExtension(((ItemToRename)lView_TargetList.SelectedItem).Before);
+            }
+        }
+        #endregion
+
         #region lView_TargetList
         private void lView_TargetList_Drop(object sender, DragEventArgs e)
         {
@@ -400,9 +417,7 @@ namespace RenameToolbox
                             filepaths.AddRange(Directory.GetFiles(s, "*.*", SearchOption.AllDirectories));
                             foreach (string item in filepaths)
                             {
-                                FileInfo fi = new FileInfo(item);
-                                if (Targets.IndexOf(Targets.Where(X => X.Path == fi.FullName).FirstOrDefault()) < 0)
-                                    Targets.Add(new ItemToRename { Path = fi.FullName, Before = fi.Name, After = GlobalConst.EMPTY_STRING, Result = GlobalConst.EMPTY_STRING });
+                                AddTargets(item);
                             }
                             break;
                     }
@@ -413,9 +428,7 @@ namespace RenameToolbox
                     {
                         if (File.Exists(s))
                         {
-                            FileInfo fi = new FileInfo(s);
-                            if (Targets.IndexOf(Targets.Where(X => X.Path == fi.FullName).FirstOrDefault()) < 0)
-                                Targets.Add(new ItemToRename { Path = fi.FullName, Before = fi.Name, After = GlobalConst.EMPTY_STRING, Result = GlobalConst.EMPTY_STRING });
+                            AddTargets(s);
                         }
                     }
                     catch (IOException ex)
@@ -428,12 +441,44 @@ namespace RenameToolbox
             }
             if (Targets.Count > 0)
             {
-                lbl_TargetCounts.Content = "No. of Items : " + Targets.Count;
+                SetTotalCounts();
+                SetTotalDuration();
                 lView_TargetList.ItemsSource = Targets;
                 CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(lView_TargetList.ItemsSource);
                 view.SortDescriptions.Add(new SortDescription("Path", ListSortDirection.Ascending));
                 lView_TargetList.Items.Refresh();
             }
+        }
+        private void AddTargets(string s)
+        {
+            FileInfo fi = new FileInfo(s);
+            if (Targets.IndexOf(Targets.Where(X => X.Path == fi.FullName).FirstOrDefault()) < 0)
+            {
+                ItemToRename file = new ItemToRename { Path = fi.FullName, Before = fi.Name, After = GlobalConst.EMPTY_STRING, Result = GlobalConst.EMPTY_STRING };
+                if (GlobalConst.FILETYPE_MEDIA_FILTER.Contains(fi.Extension.ToLowerInvariant()))
+                {
+                    TimeSpan duration = GetDuration(fi);
+                    //file.Duration = new DateTime(duration.Ticks).ToString("HH:mm:ss");
+                    file.Duration = duration;
+                    totalDuration = totalDuration.Add(duration);
+                }
+                Targets.Add(file);
+            }
+        }
+        private void SetTotalCounts()
+        {
+            lbl_TargetCounts.Content = $"No. of Items : {Targets.Count}";
+        }
+        private TimeSpan GetDuration(FileInfo fi)
+        {
+            ShellFile so = ShellFile.FromFilePath(fi.FullName);
+            double l00nS;
+            double.TryParse(so.Properties.System.Media.Duration.Value.ToString(), out l00nS);
+            return new TimeSpan(0, 0, 0, (int)(l00nS / 10000000));
+        }
+        private void SetTotalDuration()
+        {
+            lbl_TotalDuration.Content = $"Total Duration : {new DateTime(totalDuration.Ticks).ToString("HH:mm:ss")}";
         }
 
         private void lView_TargetList_DragEnter(object sender, DragEventArgs e)
@@ -510,18 +555,19 @@ namespace RenameToolbox
         private void btn_Reset_Filelist_Click(object sender, RoutedEventArgs e)
         {
             Targets.Clear();
-            lbl_TargetCounts.Content = "No. of Items : 0";
+            SetTotalCounts();
             lView_TargetList.ItemsSource = null;
             lView_TargetList.Items.Clear();
             lView_TargetList.Items.Refresh();
             listView_CollectionChanged(lView_Rules, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             btn_Remove_Item.IsEnabled = false;
             btn_Undo.IsEnabled = false;
+            totalDuration = new TimeSpan(0);
+            SetTotalDuration();
         }
 
         private void btn_Remove_Item_Click(object sender, RoutedEventArgs e)
         {
-
             if (lView_TargetList.SelectedItems.Count != 0)
             {
                 IEditableCollectionView items = lView_TargetList.Items;
@@ -529,14 +575,18 @@ namespace RenameToolbox
                 {
                     if (items.CanRemove)
                     {
+                        if (((ItemToRename)lView_TargetList.SelectedItems[0]).Duration != null)
+                        {
+                            totalDuration = totalDuration.Add(-(TimeSpan)((ItemToRename)lView_TargetList.SelectedItems[0]).Duration);
+                            SetTotalDuration();
+                        }
                         items.Remove(lView_TargetList.SelectedItems[0]);
+                        SetTotalCounts();
                     }
                 }
             }
-            lbl_TargetCounts.Content = "No. of Items : " + Targets.Count;
         }
         #endregion
-
 
         #region lView_Rules
         private void lView_Rules_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -886,7 +936,6 @@ namespace RenameToolbox
             AuxParameters_Control(false);
             cbox_RenameMode_init(true);
         }
-
         private void cbox_RenameMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             cbox_1stParam.ItemsSource = null;
@@ -900,20 +949,23 @@ namespace RenameToolbox
                 {
                     case GlobalConst.MODETYPE_PREFIX:
                     case GlobalConst.MODETYPE_SUFFIX:
-                        lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_TARGETPHASE;
-                        cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
+                        cbox_1stParam_Controls(true, GlobalConst.LBL_PARAMETER1_TARGETPHASE);
+                        //lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_TARGETPHASE;
+                        //cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
                         cbox_2ndParam_Controls(false, null);
                         break;
                     case GlobalConst.MODETYPE_REPLACE:
-                        lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_TARGETPHASE;
-                        cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
+                        cbox_1stParam_Controls(true, GlobalConst.LBL_PARAMETER1_TARGETPHASE);
+                        //lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_TARGETPHASE;
+                        //cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
                         cbox_2ndParam_Controls(true, GlobalConst.LBL_PARAMETER2_REPLACEWITH);
                         break;
                     case GlobalConst.MODETYPE_REMOVE:
                     case GlobalConst.MODETYPE_UPPERCASE:
                     case GlobalConst.MODETYPE_LOWERCASE:
-                        lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_PATTERN;
-                        cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
+                        cbox_1stParam_Controls(true, GlobalConst.LBL_PARAMETER1_PATTERN);
+                        //lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_PATTERN;
+                        //cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
                         cbox_2ndParam_Controls(false, null);
                         cbox_1st_Functions.Add(GlobalConst.FUNCTYPE_ALL);
                         cbox_1st_Functions.Add(GlobalConst.FUNCTYPE_LEFT);
@@ -932,23 +984,26 @@ namespace RenameToolbox
                         }
                         break;
                     case GlobalConst.MODETYPE_INSERT:
-                        lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_PATTERN;
-                        cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
+                        cbox_1stParam_Controls(true, GlobalConst.LBL_PARAMETER1_PATTERN);
+                        //lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_PATTERN;
+                        //cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
                         cbox_2ndParam_Controls(false, null);
                         cbox_1st_Functions.Add(GlobalConst.FUNCTYPE_PHASE);
                         cbox_1st_Functions.Add(GlobalConst.FUNCTYPE_DIGIT);
                         break;
+                    case GlobalConst.MODETYPE_PIC2PNG:
                     case GlobalConst.MODETYPE_MAKERAR:
                         lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_DEFAULT;
                         cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
+                        cbox_1stParam_Controls(false, null);
                         cbox_2ndParam_Controls(false, null);
+                        AuxParameters_Control(false);
                         break;
                 }
             cbox_1stParam.Items.Clear();
             cbox_1stParam.ItemsSource = cbox_1st_Functions;
             cbox_1stParam.Items.Refresh();
         }
-
         private void cbox_1stParam_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch (cbox_RenameMode.Text)
@@ -996,7 +1051,31 @@ namespace RenameToolbox
                     break;
             }
         }
+        private void cbox_1stParam_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            ComboBox cbo = sender as ComboBox;
 
+            if (cbo != null)
+            {
+                TextBox txt = cbo.Template.FindName("PART_EditableTextBox", cbo) as TextBox;
+
+                if (txt != null)
+                {
+                    lbl_CursorPos.Content = txt.SelectionStart;
+                }
+            }
+        }
+
+        private void cbox_1stParam_Controls(bool Visibility, string label)
+        {
+            cbox_1stParam.IsEnabled = Visibility;
+            lbl_1stParam.Visibility = Visibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            lbl_1stParam.Content = !string.IsNullOrEmpty(label) ? label : GlobalConst.EMPTY_STRING;
+            cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
+            cbox_1stParam.Visibility = Visibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            btn_GetOriginal4First.IsEnabled = Visibility;
+            btn_GetOriginal4First.Visibility = Visibility ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+        }
         private void cbox_2ndParam_Controls(bool Visibility, string label)
         {
             cbox_2ndParam.IsEnabled = Visibility;
@@ -1036,6 +1115,8 @@ namespace RenameToolbox
             cbox_3rdSubParam.IsEnabled = Visibility;
         }
         #endregion
+
+        #region Init
         public MainWindow()
         {
             InitializeComponent();
@@ -1070,38 +1151,6 @@ namespace RenameToolbox
             cbox_TargetType.SelectedIndex = 0;
             cbox_RenameMode_init(true);
         }
-
-        private void btn_GetOriginal4First_Click(object sender, RoutedEventArgs e)
-        {
-            if (lView_TargetList.SelectedIndex != -1)
-            {
-                cbox_1stParam.Text = Path.GetFileNameWithoutExtension(((ItemToRename)lView_TargetList.SelectedItem).Before);
-            }
-        }
-
-        private void btn_GetOriginal4Second_Click(object sender, RoutedEventArgs e)
-        {
-            if (lView_TargetList.SelectedIndex != -1)
-            {
-                cbox_2ndParam.Text = Path.GetFileNameWithoutExtension(((ItemToRename)lView_TargetList.SelectedItem).Before);
-            }
-        }
-        
-        private void cbox_1stParam_PreviewMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            ComboBox cbo = sender as ComboBox;
-
-            if (cbo != null)
-            {
-                TextBox txt = cbo.Template.FindName("PART_EditableTextBox", cbo) as TextBox;
-
-                if (txt != null)
-                {
-                    lbl_CursorPos.Content = txt.SelectionStart;
-                }
-            }
-        }
-
         private void cbox_RenameMode_init(bool init)
         {
             List<string> Modes = new List<string>
@@ -1116,16 +1165,18 @@ namespace RenameToolbox
             };
             if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FILENAME) Modes.Add(GlobalConst.MODETYPE_PIC2PNG);
             if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME) Modes.Add(GlobalConst.MODETYPE_MAKERAR);
-            cbox_RenameMode.Visibility = System.Windows.Visibility.Visible;
-            lbl_RenameMode.Visibility = System.Windows.Visibility.Visible;
-            cbox_1stParam.Visibility = System.Windows.Visibility.Visible;
-            lbl_1stParam.Visibility = System.Windows.Visibility.Visible;
-            cbox_2ndParam.Visibility = System.Windows.Visibility.Visible;
-            lbl_2ndParam.Visibility = System.Windows.Visibility.Visible;
+            cbox_RenameMode.Visibility = Visibility.Visible;
+            lbl_RenameMode.Visibility = Visibility.Visible;
+            cbox_1stParam.Visibility = Visibility.Visible;
+            lbl_1stParam.Visibility = Visibility.Visible;
+            cbox_2ndParam.Visibility = Visibility.Visible;
+            lbl_2ndParam.Visibility = Visibility.Visible;
             cbox_RenameMode.ItemsSource = null;
             cbox_RenameMode.ItemsSource = Modes;
             cbox_RenameMode.Items.Refresh();
             if (init) cbox_RenameMode.SelectedIndex = 3;
         }
+        #endregion
+
     }
 }

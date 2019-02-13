@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace RenameToolbox.Class
@@ -7,6 +8,7 @@ namespace RenameToolbox.Class
     {
         public event PropertyChangedEventHandler ItemPropertyChanged;
         string m_Path;
+        TimeSpan? m_Duration;
         string m_Before;
         string m_After;
         string m_Result;
@@ -19,6 +21,18 @@ namespace RenameToolbox.Class
                 {
                     m_Path = value;
                     OnPropertyChanged("Path");
+                }
+            }
+        }
+        public TimeSpan? Duration
+        {
+            get { return m_Duration; }
+            set
+            {
+                if (m_Duration != value)
+                {
+                    m_Duration = value;
+                    //OnPropertyChanged("Duration");
                 }
             }
         }

@@ -30,7 +30,7 @@ namespace RenameToolbox.Class
         public const string TARGETTYPE_FILEEXTENSION = "FileExtension";
         public const string TARGETTYPE_FOLDERNAME = "FolderName";
 
-        public const string MODETYPE_PREFIX = "prefix";
+        public const string MODETYPE_PREFIX = "Prefix";
         public const string MODETYPE_SUFFIX = "Suffix";
         public const string MODETYPE_REMOVE = "Remove";
         public const string MODETYPE_REPLACE = "Replace";
@@ -64,6 +64,10 @@ namespace RenameToolbox.Class
         public const string RESULT_INVALID_NEW_FILENAME_FILEEXTENSION = "Invalid new Filename or Extension";
 
         public const string FILETYPE_XML_FILTER = "XML Files (*.xml)|*.xml";
+        public static readonly string[] FILETYPE_MEDIA_FILTER = {
+            ".wav", ".mp3", ".mp4a", ".flac", ".ape", ".alac", ".m4a",//Audio
+            ".avi", ".mp4", ".wmv", ".mkv", //Video
+        };
         public const string FILETYPE_XML = "xml";
 
         public const string MOVE_UP = "Up";
