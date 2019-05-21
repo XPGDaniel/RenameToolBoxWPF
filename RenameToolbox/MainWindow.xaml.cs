@@ -24,7 +24,7 @@ namespace RenameToolbox
     public partial class MainWindow : Window
     {
         private XMLHelper xmlH = new XMLHelper();
-        public bool MakeRAR = false, PIC2PNG = false;
+        public bool MakeRAR = false, PIC2PNG = false, Up1Level = false;
         private enum MoveDirection { Up = -1, Down = 1 };
         public ObservableCollection<Rule> rules = new ObservableCollection<Rule>();
         public ObservableCollection<ItemToRename> Targets = new ObservableCollection<ItemToRename>();
@@ -137,6 +137,9 @@ namespace RenameToolbox
                                         case GlobalConst.MODETYPE_MAKERAR:
                                             MakeRAR = true;
                                             break;
+                                        case GlobalConst.MODETYPE_UP1LEVEL:
+                                            Up1Level = true;
+                                            break;
                                     }
                                     break;
                             }
@@ -181,11 +184,12 @@ namespace RenameToolbox
                                 {
                                     try
                                     {
-                                        if (!string.IsNullOrEmpty(Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After))
+                                        string newPath = Path.Combine(Directory.GetParent(fileCandidate.Path).FullName, fileCandidate.After);
+                                        if (!string.IsNullOrEmpty(newPath))
                                         {
-                                            if (fileCandidate.Path != Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After)
+                                            if (fileCandidate.Path != newPath)
                                             {
-                                                Directory.Move(fileCandidate.Path, Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After);
+                                                Directory.Move(fileCandidate.Path, newPath);
                                                 fileCandidate.Result = GlobalConst.RESULT_RENAME_OK;
                                             }
                                             if (MakeRAR)
@@ -197,7 +201,7 @@ namespace RenameToolbox
                                                     //p.StartInfo.RedirectStandardError = true;
                                                     p.StartInfo.UseShellExecute = false;
                                                     p.StartInfo.CreateNoWindow = false; //Default:true
-                                                    p.StartInfo.Arguments = " a -ep1 -r \"" + Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After + ".rar\" \"" + Directory.GetParent(fileCandidate.Path).FullName + "\\" + fileCandidate.After + "\\*\" -rr3p";
+                                                    p.StartInfo.Arguments = " a -ep1 -r \"" + newPath + ".rar\" \"" + newPath + "\\*\" -rr3p";
                                                     p.Start();
                                                     //string stdoutx = p.StandardOutput.ReadToEnd();
                                                     //string stderrx = p.StandardError.ReadToEnd();
@@ -206,6 +210,57 @@ namespace RenameToolbox
                                                     //Console.WriteLine("Stdout : {0}", stdoutx);
                                                     //Console.WriteLine("Stderr : {0}", stderrx);
                                                     fileCandidate.Result += GlobalConst.RESULT_RAR_OK;
+                                                }
+                                            }
+                                            if (Up1Level)
+                                            {
+                                                //string Up1LevelPath = Directory.GetParent(newPath).FullName;
+                                                if (Directory.GetDirectories(fileCandidate.Path).Count() > 0)
+                                                {
+                                                    var firstSub = Directory.GetDirectories(fileCandidate.Path)[0];
+                                                    List<string> subFolders = Directory.GetDirectories(firstSub).ToList();
+                                                    List<string> files = Directory.GetFiles(firstSub).ToList();
+                                                    if (files.Any())
+                                                    {
+                                                        foreach (var file in files)
+                                                        {
+                                                            try
+                                                            {
+                                                                File.Move(file, Path.Combine(newPath, Path.GetFileName(file)));
+                                                            }
+                                                            catch (Exception ex)
+                                                            {
+                                                                throw ex;
+                                                            }
+                                                        }
+                                                        if (!subFolders.Any())
+                                                        {
+                                                            try
+                                                            {
+                                                                Directory.Delete(firstSub);
+                                                            }
+                                                            catch (Exception ex)
+                                                            {
+                                                                throw ex;
+                                                            }
+                                                        }
+                                                    }
+                                                    if (subFolders.Any())
+                                                    {
+                                                        foreach (var subFolder in subFolders)
+                                                        {
+                                                            try
+                                                            {
+                                                                Directory.Move(subFolder, Path.Combine(newPath, Path.GetFileName(subFolder)));
+                                                                Directory.Delete(firstSub);
+                                                            }
+                                                            catch (Exception ex)
+                                                            {
+                                                                throw ex;
+                                                            }
+                                                        }
+                                                    }
+                                                    fileCandidate.Result += GlobalConst.RESULT_UP1LEVEL_OK;
                                                 }
                                             }
                                         }
@@ -310,7 +365,7 @@ namespace RenameToolbox
                 btn_Undo.IsEnabled = true;
             }
             MessageBox.Show("Done!");
-            MakeRAR = false; PIC2PNG = false;
+            MakeRAR = false; PIC2PNG = false; Up1Level = false;
         }
         private void btn_Undo_Click(object sender, RoutedEventArgs e)
         {
@@ -637,6 +692,8 @@ namespace RenameToolbox
                 !string.IsNullOrEmpty(cbox_1stParam.Text)) ||
             (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME &&
             cbox_RenameMode.SelectedItem.ToString() == GlobalConst.MODETYPE_MAKERAR) ||
+            (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME &&
+            cbox_RenameMode.SelectedItem.ToString() == GlobalConst.MODETYPE_UP1LEVEL) ||
             (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FILENAME &&
             cbox_RenameMode.SelectedItem.ToString() == GlobalConst.MODETYPE_PIC2PNG))
             {
@@ -781,12 +838,14 @@ namespace RenameToolbox
             lView_Rules.Items.Refresh();
             listView_CollectionChanged(lView_Rules, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             MakeRAR = false;
+            Up1Level = false;
             PIC2PNG = false;
         }
 
         private void btn_RemoveRule_Click(object sender, RoutedEventArgs e)
         {
             if (((Rule)lView_Rules.SelectedItem).Mode == GlobalConst.MODETYPE_MAKERAR) MakeRAR = false;
+            if (((Rule)lView_Rules.SelectedItem).Mode == GlobalConst.MODETYPE_UP1LEVEL) Up1Level = false;
             if (((Rule)lView_Rules.SelectedItem).Mode == GlobalConst.MODETYPE_PIC2PNG) PIC2PNG = false;
             IEditableCollectionView items = lView_Rules.Items; //Cast to interface
             if (items.CanRemove)
@@ -993,6 +1052,7 @@ namespace RenameToolbox
                         break;
                     case GlobalConst.MODETYPE_PIC2PNG:
                     case GlobalConst.MODETYPE_MAKERAR:
+                    case GlobalConst.MODETYPE_UP1LEVEL:
                         lbl_1stParam.Content = GlobalConst.LBL_PARAMETER1_DEFAULT;
                         cbox_1stParam.Text = GlobalConst.EMPTY_STRING;
                         cbox_1stParam_Controls(false, null);
@@ -1164,7 +1224,11 @@ namespace RenameToolbox
                 GlobalConst.MODETYPE_INSERT
             };
             if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FILENAME) Modes.Add(GlobalConst.MODETYPE_PIC2PNG);
-            if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME) Modes.Add(GlobalConst.MODETYPE_MAKERAR);
+            if (cbox_TargetType.SelectedItem.ToString() == GlobalConst.TARGETTYPE_FOLDERNAME)
+            {
+                Modes.Add(GlobalConst.MODETYPE_MAKERAR);
+                Modes.Add(GlobalConst.MODETYPE_UP1LEVEL);
+            };
             cbox_RenameMode.Visibility = Visibility.Visible;
             lbl_RenameMode.Visibility = Visibility.Visible;
             cbox_1stParam.Visibility = Visibility.Visible;

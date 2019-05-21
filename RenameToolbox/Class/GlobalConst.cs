@@ -38,6 +38,7 @@ namespace RenameToolbox.Class
         public const string MODETYPE_LOWERCASE = "lowercase";
         public const string MODETYPE_INSERT = "Insert";
         public const string MODETYPE_MAKERAR = "MakeRAR";
+        public const string MODETYPE_UP1LEVEL = "Up1Level";
         public const string MODETYPE_PIC2PNG = "PIC2PNG";
 
         public const string FUNCTYPE_ALL = "All";
@@ -58,6 +59,8 @@ namespace RenameToolbox.Class
         public const string RESULT_UNDO_FAIL = "Undo Fail";
         public const string RESULT_RAR_OK = "RAR OK";
         public const string RESULT_RAR_FAIL = "RAR Fail";
+        public const string RESULT_UP1LEVEL_OK = "Up1Level OK";
+        public const string RESULT_UP1LEVEL_FAIL = "Up1Level Fail";
         public const string RESULT_PNG_OK = "PNG OK";
         public const string RESULT_PNG_FAIL = "PNG Fail";
         public const string RESULT_INVALID_NEW_FOLDERNAME = "Invalid new FolderName";
